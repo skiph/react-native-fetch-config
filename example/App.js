@@ -1,49 +1,89 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React from 'react';
+import { View, Image, Text, Button, StyleSheet } from 'react-native';
+import ShapeView from './ShapeView'
+import FetchClient from 'react-native-fetch-client';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {shape: 'logo',
+                  status: ''};
+  }
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+  // check connection
+  checkConnection = () => {
+                  
+    //FetchClient.replaceClient();
 
-type Props = {};
-export default class App extends Component<Props> {
+    fetch('https://demo-server.approovr.io/hello', {
+      method: 'GET',
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Status ${response.status}`);
+      }
+      return response.text()
+    })
+    .then((text) => {
+      this.setState(previousState => {
+        return { shape: 'hello', status: text };
+      })
+    })
+    .catch((error) => {
+      this.setState(previousState => {
+        return { shape: 'confused', status: error.message };
+      })
+    });
+  }
+
+  // render the app screen
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <View style={styles.header}>
+          <Text style={{fontSize: 24}}>Approov Shapes</Text>
+        </View>
+        <ShapeView style={styles.content} shape={this.state.shape} status={this.state.status}/>
+        <View style={styles.footer}>
+          <View style={styles.buttonBar}>
+          <Button onPress={this.checkConnection} title="Test Hello" />
+          </View>
+        </View>
       </View>
     );
   }
 }
 
+// flexbox styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
+    flexDirection: 'column',
+    backgroundColor: '#fff',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  header: {
+    flex: .1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  content: {
+    flex: .8,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footer: {
+    flex: .1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonBar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-around',
   },
 });
+
+// end of file

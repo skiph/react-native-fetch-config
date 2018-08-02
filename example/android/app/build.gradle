@@ -149,3 +149,9 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+task myCopy(type: Copy) {
+    from "../../fetch-config.json"
+    into "src/main/assets/"
+}
+preBuild.dependsOn(myCopy)

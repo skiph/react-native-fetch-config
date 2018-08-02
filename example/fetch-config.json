@@ -1,0 +1,9 @@
+{
+    "domains": {
+        "*.approovr.io" : {
+            "pins": [
+                "sha256/oq+Uj+2TYMg13txh1pXW0/VLAkonU3TnoPr5hfxPZVC="
+            ]
+        }
+    }
+}

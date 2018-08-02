@@ -1,5 +1,4 @@
 package com.example;
-
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
@@ -9,8 +8,22 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+
+
+import com.facebook.react.modules.network.OkHttpClientFactory;
+import com.facebook.react.modules.network.OkHttpClientProvider;
+import com.facebook.react.modules.network.ReactCookieJarContainer;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.CertificatePinner;
+import okhttp3.OkHttpClient;
+
+import com.criticalblue.reactnative.PinnedClientFactory;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -43,5 +56,20 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+
+    InputStream is;
+    try {
+      is = getAssets().open("fetch-config.json");
+    } catch (IOException ex) {
+      is = null;
+    }
+
+    OkHttpClientProvider.setOkHttpClientFactory(new PinnedClientFactory(is));
+
+    try {
+      if (is != null) is.close();
+    } catch (IOException ex) {
+      is = null;
+    }
   }
 }

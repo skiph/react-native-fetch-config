@@ -1,6 +1,11 @@
 package com.example;
 
 import com.facebook.react.ReactActivity;
+import android.os.Bundle;
+
+import com.facebook.react.modules.network.OkHttpClientProvider;
+
+import com.criticalblue.reactnative.PinnedClientFactory;
 
 public class MainActivity extends ReactActivity {
 
