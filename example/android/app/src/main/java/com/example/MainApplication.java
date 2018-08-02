@@ -1,6 +1,7 @@
 package com.example;
 import android.app.Application;
 
+import com.criticalblue.reactnative.PinnedApplication;
 import com.facebook.react.ReactApplication;
 import com.criticalblue.reactnative.RNFetchClientPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,7 +26,7 @@ import okhttp3.OkHttpClient;
 
 import com.criticalblue.reactnative.PinnedClientFactory;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends PinnedApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -56,20 +57,5 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-
-    InputStream is;
-    try {
-      is = getAssets().open("fetch-config.json");
-    } catch (IOException ex) {
-      is = null;
-    }
-
-    OkHttpClientProvider.setOkHttpClientFactory(new PinnedClientFactory(is));
-
-    try {
-      if (is != null) is.close();
-    } catch (IOException ex) {
-      is = null;
-    }
   }
 }
